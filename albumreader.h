@@ -14,6 +14,7 @@ public:
     Q_INVOKABLE bool read();
 
 signals:
+    void done();
 
 private:
     QMap<int, Album> mAlbums;

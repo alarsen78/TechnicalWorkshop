@@ -11,8 +11,21 @@ Window {
     LoaderAnimation {
         id: loaderAnimation
     }
+
+    Text {
+        id: imagePlaceholder
+        text: "Albums UI placeholder..."
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        visible: false
+    }
+
     AlbumReader {
         id: albumReader
+        onDone: {
+            loaderAnimation.visible = false
+            imagePlaceholder.visible = true
+        }
     }
 
     Timer {

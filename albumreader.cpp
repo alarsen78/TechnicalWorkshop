@@ -57,5 +57,7 @@ bool AlbumReader::read()
     printf("AlbumReader::read() done\n");
     fflush(stdout);
 
+    emit done();
+
     return true;
 }
