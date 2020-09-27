@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>BouncingRectangle.qml</file>
+        <file>LoaderAnimation.qml</file>
     </qresource>
 </RCC>
