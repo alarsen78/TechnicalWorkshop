@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>BouncingRectangle.qml</file>
         <file>LoaderAnimation.qml</file>
+        <file>files.qrc</file>
     </qresource>
 </RCC>
