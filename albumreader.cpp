@@ -8,33 +8,33 @@
 #include "album.h"
 #include "photo.h"
 
-AlbumReader::AlbumReader(QObject *parent) : QObject(parent)
+AlbumReader::AlbumReader(QObject *parent) : QThread(parent)
 {
 }
 
-bool AlbumReader::read()
+void AlbumReader::run()
 {
-    printf("AlbumReader::read() starting\n");
+    printf("AlbumReader::run() starting\n");
     fflush(stdout);
 
-    // TODO: This function blocks the UI.
-    //       Use QThread or QtConcurrent here to do loading in worker thread?
-
     mAlbums.clear();
+
+    printf("AlbumReader::run() reading JSON\n");
+    fflush(stdout);
 
     QFile photosFile(":/photos.json");
 
     if (!photosFile.open(QIODevice::ReadOnly)) {
-        qWarning("Couldn't open photos file.");
-        return false;
+        emit failed("Couldn't open photos file!");
+        return;
     }
 
     QByteArray photosData = photosFile.readAll();
     QJsonDocument loadDoc = QJsonDocument::fromJson(photosData);
 
     if (!loadDoc.isArray()) {
-        qWarning("Photos file didn't contain an array as expected");
-        return false;
+        emit failed("Photos file didn't contain an array as expected!");
+        return;
     }
 
     QJsonArray photosArray = loadDoc.array();
@@ -48,16 +48,16 @@ bool AlbumReader::read()
             album.setAlbumId(photo.albumId());
 
         album.addPhoto(photo);
-
-        // TODO: Remove when this funcion is run in worker thread
-        QCoreApplication::processEvents();
-
     }
 
-    printf("AlbumReader::read() done\n");
+    printf("AlbumReader::run() pretending to load photos\n");
+    fflush(stdout);
+
+    std::this_thread::sleep_for (std::chrono::seconds(3));
+
+    printf("AlbumReader::run() done\n");
     fflush(stdout);
 
     emit done();
-
-    return true;
 }
+

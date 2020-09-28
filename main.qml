@@ -20,16 +20,27 @@ Window {
         visible: false
     }
 
+    Text {
+        id: errorMessage
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        visible: false
+    }
+
     AlbumReader {
         id: albumReader
         onDone: {
             loaderAnimation.visible = false
             imagePlaceholder.visible = true
         }
+        onFailed: {
+            loaderAnimation.visible = false
+            errorMessage.text = "Failed to load albums: " + msg
+            errorMessage.visible = true
+        }
     }
 
-    Timer {
-        interval: 3000; running: true; repeat: false
-        onTriggered: albumReader.read()
+    Component.onCompleted: {
+        albumReader.start()
     }
 }
